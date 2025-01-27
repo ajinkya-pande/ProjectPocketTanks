@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pocket Tanks Mini</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(40, 40, 40);
+        }
+
+        canvas {
+            display: block;
+            background-color: #87CEEB;
+        }
+
+        .container {
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .inputs {
+            margin: 10px;
+            padding: 10px 15px; 
+        }
+
+        #fireButton {
+            padding: 20px 50px;
+            font-size: large;
+            font-weight: bold;
+            cursor: not-allowed;
+            background-color: #ddd;
+            border: none;
+        }
+
+        #fireButton.enabled {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div class="container">
+        <input placeholder="Power (0-100)" id="power" class="inputs">
+        
+        <input placeholder="Angle (0-180)" id="angle" class="inputs">
+        
+        <button id="fireButton" class="inputs" disabled>Fire</button>
+        <div id="errorMessage" class="error"></div>
+    </div>
+
+    <script src="gameScript.js"></script>
+</body>
+
+</html>
