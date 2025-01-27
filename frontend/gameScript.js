@@ -1,3 +1,63 @@
+/**
+ * ? GAME
+ * POCKET TANKS MINI
+ * 
+ * 
+ * ? AUTHOR
+ * AJINKYA PANDE
+ * 
+ * 
+ * ? DESCRIPTION
+ * Pocket Tanks Mini is a simple, turn-based artillery game where two players take control of tanks positioned on opposite ends of a battlefield. 
+ * The objective is to shoot a single type of projectile at the opponent, adjusting the angle and power of the shot. 
+ * The game progresses with alternating turns.
+ * 
+ * Players earn points and damage their opponent’s health when a shot hits the other player's tank. 
+ * The game ends when one player's health reaches zero, and the other player is declared the winner. 
+ * Players can then choose to replay the game or exit.
+ * 
+ * 
+ * ? GAMEPLAY
+ * * Movement:
+ *   Tanks can move left and right during players turn using left-arrow-key and right-arrow-key respectively.
+ * 
+ * * Input:
+ *   User has to provide input for power and angle in input fields.
+ *   Power - Positive integer
+ *   Angle - Integer between 0 and 180 degrees.
+ * 
+ * * Fire:
+ *   The FIRE button is disabled until valid power and angle inputs are provided.
+ *   Once enabled, user can click to fire the weapon.
+ * 
+ * * Win:
+ *   First player to reach 100 points is winner.
+ * 
+ * 
+ * ? FEATURES
+ * * Tank Movement:
+ *   Move your tank left or right to position yourself for the perfect shot, as well as stay away from enemy radar !!
+ *   
+ * * Weapons:
+ *   Fire a basic projectile with adjustable power and angle to hit the opponent.
+ * 
+ * * Gravity and Physics:
+ *   The projectile’s path is affected by gravity, adding a realistic arc to your shots.
+ *   The power and angle inputs affect the projectile shot.
+ * 
+ * * Obstacles:
+ *   Dynamic terrain is scattered across the battlefield, potentially blocking shots and adding an extra layer of strategy.
+ * 
+ * * Collision: 
+ *   The projecitle hit to the oponent is analyzed and health and score are adjusted accordingly.
+ * 
+ * * Health and Score System:
+ *   Each player starts with 100 health. 
+ *   Deal damage to the opponent to lower their health and score points with successful hits.
+ *   First player to reach score of 100 wins the game.
+ * 
+*/
+
 // Load images
 const player1Image = new Image();
 const player2Image = new Image();
