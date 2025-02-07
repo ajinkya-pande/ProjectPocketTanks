@@ -1,0 +1,60 @@
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]istro/
+[Dd]ebug/.*.pdb
+[Dd]ebug/.*.dll
+[Dd]ebug/.*.exe
+[Dd]ebug/.*.app
+[Dd]ebug/.*.o
+[Dd]ebug/.*.obj
+[Dd]ebug/.*.exe
+
+[Dd]ist/
+[Dd]eploy/
+Release/
+bin/
+obj/
+
+# User-specific files
+.vs/
+.vscode/
+.idea/
+game.db
+game.db-shm
+game.db-wal
+
+# User-specific build directories
+.vscode/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# User-specific configurations (IntelliJ, Rider, etc.)
+.idea/
+.vscode/
+
+# Windows Installer files
+Thumbs.db
+Desktop.ini
+
+# JetBrains Rider/IntelliJ project files
+.idea/
+
+# NPM packages and Node.js related files (if any)
+node_modules/
+
+# ASP.NET Core settings files
+appsettings.Development.json
+appsettings.Production.json
+appsettings.json
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Local environment settings
+.env
