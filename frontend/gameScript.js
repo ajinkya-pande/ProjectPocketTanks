@@ -106,7 +106,7 @@ const gameConfig = {
     projectileVelocity: 0.4,
     tankVelocity: 0.2,
     standardHit: 20,
-    canvasHeight: window.innerHeight - 150,
+    canvasHeight: window.innerHeight - 200,
     canvasWidth: window.innerWidth,
     groundHeight: 60,
     gravity: 0.5,
@@ -501,30 +501,44 @@ function validateNameInputFields() {
     }
 }
 
+/*
+   This function is not working as expected.
+   I was unable to find the root cause.
+
+   Current behaviour - 
+   Function saves data to database,
+   but on getting response the HTML page re-renders and the game data is lost.
+
+   Hack to play game with this - 
+   Enter the same player names second time, 
+   though it returns bad request, I have not handled it, so that I can play game.
+
+*/
+async function savePlayerDataToDatabase(player1Value, player2Value) {
+    try {
+        let response = await fetch(`${backendURL}/api/Player/new-players`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Player1Name: gameConfig.player1.name,
+                Player2Name: gameConfig.player2.name
+            })
+        });
+        if (!response.ok) {
+            throw new Error('An error occurred while registering players');
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 function startGame() {
     let player1Value = document.getElementById('player1').value;
     let player2Value = document.getElementById('player2').value;
 
     if (player1Value && player2Value) {
-        try {
-            fetch(`${backendURL}/api/Player/new-players`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    Player1Name: player1Value,
-                    Player2Name: player2Value
-                })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('An error occurred while registering players');
-                    }
-                });
-        } catch (error) {
-            alert(error.message);
-        }
         gameConfig.player1.name = player1Value;
         gameConfig.player2.name = player2Value;
         closeOverlayDialog();
@@ -602,6 +616,11 @@ window.addEventListener('keyup', controller.eventKeyListener);
 powerInput.addEventListener('input', validateGameInputFields);
 angleInput.addEventListener('input', validateGameInputFields);
 document.getElementById('fireButton').addEventListener('click', handleFireButtonClick);
+document.getElementById('startGameBtn').addEventListener('click', (event) => {
+    event.preventDefault();
+    startGame();
+    savePlayerDataToDatabase();
+});
 
 
 startProjectile();

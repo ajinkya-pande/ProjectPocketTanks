@@ -107,6 +107,32 @@
         .cancel-btn {
             background-color: #f44336;
         }
+
+        .leaderboard-container {
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .leaderboard-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        #leaderboardButton {
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #leaderboardButton:hover {
+            background-color: #1976D2;
+        }
     </style>
 </head>
 
@@ -116,21 +142,60 @@
             <h2>Enter Player Names</h2>
             <input type="text" id="player1" placeholder="Player 1 Name" oninput="validateNameInputFields()">
             <input type="text" id="player2" placeholder="Player 2 Name" oninput="validateNameInputFields()">
-            <button id="startGameBtn" disabled onclick="startGame()">Start Game</button>
+            <button id="startGameBtn" type="button" disabled>Start Game</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="leaderboardOverlay">
+        <div class="dialog-box">
+            <h2>Leaderboard</h2>
+            <div id="leaderboard" class="leaderboard-container">
+            </div>
+            <button class="cancel-btn" onclick="closeLeaderboard()">Close</button>
         </div>
     </div>
 
     <canvas id="gameCanvas"></canvas>
     <div class="container">
         <input placeholder="Power (0-100)" id="power" class="inputs">
-        
         <input placeholder="Angle (0-180)" id="angle" class="inputs">
-        
         <button id="fireButton" class="inputs" disabled>Fire</button>
         <div id="errorMessage" class="error"></div>
     </div>
+    <button id="leaderboardButton" onclick="openLeaderboard()">View Leaderboard</button>
 
     <script src="gameScript.js"></script>
+
+    <script>
+        async function fetchLeaderboardData() {
+            try {
+                const response = await fetch(`${backendURL}/api/Database/leaderboard`);
+                const data = await response.json();
+                
+                if (data && Array.isArray(data)) {
+                    const leaderboardElement = document.getElementById('leaderboard');
+                    leaderboardElement.innerHTML = '';
+                    data.forEach(entry => {
+                        const entryElement = document.createElement('div');
+                        entryElement.classList.add('leaderboard-entry');
+                        entryElement.innerHTML = `${entry.playerName}: ${entry.highScore}`;
+                        leaderboardElement.appendChild(entryElement);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching leaderboard data:', error);
+            }
+        }
+
+        function openLeaderboard() {
+            fetchLeaderboardData();
+            document.getElementById('leaderboardOverlay').style.display = 'flex';
+        }
+
+        function closeLeaderboard() {
+            document.getElementById('leaderboardOverlay').style.display = 'none';
+        }
+    </script>
 </body>
 
 </html>
