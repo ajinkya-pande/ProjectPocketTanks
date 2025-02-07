@@ -78,12 +78,16 @@ const gameConfig = {
         score: 0,
         health: 100,
         x: 50,
+        lastPower: 0,
+        lastAngle: 0,
     },
     player2: {
         name: 'Player 2',
         score: 0,
         health: 100,
         x: window.innerWidth - 150,
+        lastPower: 0,
+        lastAngle: 0,
     },
     winner: null,
     tank: {
@@ -107,6 +111,8 @@ const gameConfig = {
     groundHeight: 60,
     gravity: 0.5,
     movableArea: 200,
+    turnCount: 1,
+    maxTurnAllowed: 8,
 }
 
 
@@ -263,12 +269,33 @@ const controller = {
 // Change Player turn
 function changePlayerTurn() {
     currentProjectile.isActive = false;
+
+
+    // Store the current inputs
+    if (gameConfig.isPlayer1Turn) {
+        gameConfig.player1.lastPower = parseInt(powerInput.value) || 0;
+        gameConfig.player1.lastAngle = parseInt(angleInput.value) || 0;
+    } else {
+        gameConfig.player2.lastPower = parseInt(powerInput.value) || 0;
+        gameConfig.player2.lastAngle = parseInt(angleInput.value) || 0;
+    }
+
     gameConfig.isPlayer1Turn = !gameConfig.isPlayer1Turn;
-    powerInput.value = '';
-    angleInput.value = '';
-    validateGameInputFields();
     startProjectile();
     isFiring = false;
+    if (gameConfig.isPlayer1Turn) {
+        gameConfig.turnCount = gameConfig.turnCount + 1;
+    }
+
+    // Pre-fill input fields
+    if (gameConfig.isPlayer1Turn) {
+        powerInput.value = gameConfig.player1.lastPower;
+        angleInput.value = gameConfig.player1.lastAngle;
+    } else {
+        powerInput.value = gameConfig.player2.lastPower;
+        angleInput.value = gameConfig.player2.lastAngle;
+    }
+    validateGameInputFields();
 }
 
 
@@ -382,9 +409,19 @@ function displayScores() {
 function checkGameEnd() {
     // Check health for each player and set the winner
     if (gameConfig.player1.health == 0)
-        gameConfig.winner = 'Player 2';
+        gameConfig.winner = gameConfig.player2.name;
     else if (gameConfig.player2.health == 0)
-        gameConfig.winner = 'Player 1';
+        gameConfig.winner = gameConfig.player1.name;
+
+    if (gameConfig.turnCount == gameConfig.maxTurnAllowed) {
+        if (gameConfig.player1.health == gameConfig.player2.health) {
+            gameConfig.winner = "Its a DRAW! No player";
+        }
+        else {
+            gameConfig.winner = gameConfig.player1.health > gameConfig.player2.health ?
+                gameConfig.player1.name : gameConfig.player2.name;
+        }
+    }
 
     if (gameConfig.winner) {
         // Show confirmation dialog if game is over
@@ -394,6 +431,11 @@ function checkGameEnd() {
             gameConfig.isPlayer1Turn = true;
             player1Tank.x = gameConfig.player1.x;
             player2Tank.x = gameConfig.player2.x;
+            gameConfig.turnCount = 1;
+            gameConfig.player1.lastAngle = 0;
+            gameConfig.player1.lastPower = 0;
+            gameConfig.player2.lastAngle = 0;
+            gameConfig.player2.lastPower = 0;
             gameConfig.player1.health = 100;
             gameConfig.player1.score = 0;
             gameConfig.player2.health = 100;
@@ -529,7 +571,7 @@ function gameLoop() {
     displayPlayerTurn();
     displayScores();
     checkGameEnd();
-    
+
     window.requestAnimationFrame(gameLoop);
 }
 
