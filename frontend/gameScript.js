@@ -223,6 +223,7 @@ class Obstacle {
     }
 }
 
+const backendURL = 'http://localhost:5096';
 
 // Set game canvas
 const canvas = document.querySelector("#gameCanvas");
@@ -500,14 +501,39 @@ function validateNameInputFields() {
     }
 }
 
-function startGame() {
+async function startGame() {
     let player1Value = document.getElementById('player1').value;
     let player2Value = document.getElementById('player2').value;
 
     if (player1Value && player2Value) {
-        gameConfig.player1.name = player1Value;
-        gameConfig.player2.name = player2Value;
-        closeOverlayDialog();
+        try {
+            await fetch(`${backendURL}/api/Player/new-players`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Player1Name: player1Value,
+                    Player2Name: player2Value
+                })
+            })
+                .then(response => {
+                    if(!response.ok) {
+                        throw new Error(error.message || 'An error occurred while registering players');
+                    }
+                })
+                .then(() => {
+                    gameConfig.player1.name = player1Value;
+                    gameConfig.player2.name = player2Value;
+                    console.log(gameConfig);
+
+                    closeOverlayDialog();
+                });
+        } catch (error) {
+            alert(error.message);
+        }
+    } else {
+        alert('Please enter valid player names for both players.');
     }
 }
 

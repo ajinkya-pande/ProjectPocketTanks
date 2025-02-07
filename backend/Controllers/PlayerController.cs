@@ -16,31 +16,41 @@ namespace backend.Controllers
         }
 
         // Register player's name
-        [HttpPost("new-player")]
+        [HttpPost("new-players")]
         public async Task<IActionResult> RegisterPlayer([FromBody] PlayerNameRequest? request)
         {
-            if (request == null || string.IsNullOrEmpty(request.PlayerName))
+            if (request == null)
             {
-                return BadRequest("Player name is required");
+                return BadRequest();
             }
 
-            var existingUser = await _db.UserProfiles.FirstOrDefaultAsync(u => u.PlayerName == request.PlayerName);
+            var player1 = await _db.UserProfiles.FirstOrDefaultAsync(u => u.PlayerName == request.Player1Name);
+            var player2 = await _db.UserProfiles.FirstOrDefaultAsync(u => u.PlayerName == request.Player2Name);
 
-            if (existingUser != null)
+            if (player1 != null)
             {
-                return BadRequest("Player name already exists");
+                return BadRequest(new {message = "Player 1 name already exists"});
+            }
+            if (player2 != null)
+            {
+                return BadRequest(new {message = "Player 2 name already exists"});
             }
 
-            var newUser = new UserProfile
+            var newUser1 = new UserProfile
             {
-                PlayerName = request.PlayerName,
+                PlayerName = request.Player1Name,
                 HighScore = 0
             };
-
-            _db.UserProfiles.Add(newUser);
+            var newUser2 = new UserProfile
+            {
+                PlayerName = request.Player2Name,
+                HighScore = 0
+            };
+            _db.UserProfiles.Add(newUser1);
+            _db.UserProfiles.Add(newUser2);
             await _db.SaveChangesAsync();
 
-            return Ok(new { message = "New player registered successfully" });
+            return Ok(new { message = "New players registered successfully" });
         }
 
         // Endpoint to submit a player's score
