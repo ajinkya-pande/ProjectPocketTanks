@@ -266,7 +266,7 @@ function changePlayerTurn() {
     gameConfig.isPlayer1Turn = !gameConfig.isPlayer1Turn;
     powerInput.value = '';
     angleInput.value = '';
-    validateInputs();
+    validateGameInputFields();
     startProjectile();
     isFiring = false;
 }
@@ -366,7 +366,7 @@ function handleFireButtonClick() {
 function displayPlayerTurn() {
     context.fillStyle = gameConfig.font.color;
     context.font = gameConfig.font.style;
-    context.fillText(gameConfig.isPlayer1Turn ? "Player 1's Turn" : "Player 2's Turn", gameConfig.canvasWidth / 2 - 60, 30);
+    context.fillText((gameConfig.isPlayer1Turn ? gameConfig.player1.name : gameConfig.player2.name) + "'s Turn", gameConfig.canvasWidth / 2 - 60, 30);
 }
 
 function displayScores() {
@@ -374,9 +374,9 @@ function displayScores() {
     context.font = gameConfig.font.style;
 
     // Display Player 1's score
-    context.fillText("Player 1: " + gameConfig.player1.score, 20, 30);
+    context.fillText(gameConfig.player1.name + ": " + gameConfig.player1.score, 20, 30);
     // Display Player 2's score
-    context.fillText("Player 2: " + gameConfig.player2.score, gameConfig.canvasWidth - 120, 30);
+    context.fillText(gameConfig.player2.name + ": " + gameConfig.player2.score, gameConfig.canvasWidth - 120, 30);
 }
 
 function checkGameEnd() {
@@ -402,13 +402,14 @@ function checkGameEnd() {
 
             powerInput.value = '';
             angleInput.value = '';
-            validateInputs();
+            validateGameInputFields();
             generateObstacles();
+            showOverlayDialog();
         }
     }
 }
 
-const validateInputs = () => {
+const validateGameInputFields = () => {
     const powerValue = parseInt(powerInput.value);
     const angleValue = parseInt(angleInput.value);
     let isValid = true;
@@ -436,6 +437,37 @@ const validateInputs = () => {
         fireButton.disabled = true;
     }
 };
+
+function showOverlayDialog() {
+    document.getElementById('overlay').style.display = 'flex';
+}
+
+function closeOverlayDialog() {
+    document.getElementById('overlay').style.display = 'none';
+}
+
+function validateNameInputFields() {
+    let player1 = document.getElementById('player1').value.trim();
+    let player2 = document.getElementById('player2').value.trim();
+    const startGameBtn = document.getElementById('startGameBtn');
+
+    if (player1 && player2) {
+        startGameBtn.disabled = false;
+    } else {
+        startGameBtn.disabled = true;
+    }
+}
+
+function startGame() {
+    let player1Value = document.getElementById('player1').value;
+    let player2Value = document.getElementById('player2').value;
+
+    if (player1Value && player2Value) {
+        gameConfig.player1.name = player1Value;
+        gameConfig.player2.name = player2Value;
+        closeOverlayDialog();
+    }
+}
 
 
 // Main game function
@@ -497,7 +529,7 @@ function gameLoop() {
     displayPlayerTurn();
     displayScores();
     checkGameEnd();
-
+    
     window.requestAnimationFrame(gameLoop);
 }
 
@@ -505,13 +537,14 @@ function gameLoop() {
 // Event listeners
 window.addEventListener('keydown', controller.eventKeyListener);
 window.addEventListener('keyup', controller.eventKeyListener);
-powerInput.addEventListener('input', validateInputs);
-angleInput.addEventListener('input', validateInputs);
+powerInput.addEventListener('input', validateGameInputFields);
+angleInput.addEventListener('input', validateGameInputFields);
 document.getElementById('fireButton').addEventListener('click', handleFireButtonClick);
 
 
 startProjectile();
 generateObstacles();
-validateInputs();
+validateGameInputFields();
+showOverlayDialog();
 
 window.requestAnimationFrame(gameLoop);
