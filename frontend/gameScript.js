@@ -328,6 +328,26 @@ function generateObstacles() {
     }
 }
 
+async function savePlayerScore(playerName, hitPoint) {
+    try {
+        let response = await fetch(`${backendURL}/api/Player/submit-score`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                PlayerName: playerName,
+                Score: hitPoint
+            })
+        });
+        if (!response.ok) {
+            throw new Error('An error occurred while registering players');
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 // Start the projectile for the current player
 function startProjectile() {
@@ -348,10 +368,12 @@ function detectProjectileCollision() {
         if (gameConfig.isPlayer1Turn) {
             gameConfig.player1.score += gameConfig.standardHit;
             gameConfig.player2.health -= gameConfig.standardHit;
+            savePlayerScore(gameConfig.player1.name, gameConfig.standardHit);
         }
         else {
             gameConfig.player2.score += gameConfig.standardHit;
             gameConfig.player1.health -= gameConfig.standardHit;
+            savePlayerScore(gameConfig.player2.name, gameConfig.standardHit);
         }
 
         changePlayerTurn();
