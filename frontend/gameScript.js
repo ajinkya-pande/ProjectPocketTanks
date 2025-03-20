@@ -330,7 +330,7 @@ function generateObstacles() {
 
 async function savePlayerScore(playerName, hitPoint) {
     try {
-        let response = await fetch(`${backendURL}/api/Player/submit-score`, {
+        let response = await fetch(`${backendURL}/api/player/submit-score`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
