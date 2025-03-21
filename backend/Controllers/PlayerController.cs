@@ -80,6 +80,7 @@ namespace backend.Controllers
                 {
                     userProfile.HighScore = score.Score;
                 }
+                _db.UserProfiles.Update(userProfile);
             }
 
             await _db.SaveChangesAsync();

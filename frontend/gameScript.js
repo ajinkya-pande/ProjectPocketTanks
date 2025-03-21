@@ -536,9 +536,9 @@ function validateNameInputFields() {
    though it returns bad request, I have not handled it, so that I can play game.
 
 */
-async function savePlayerDataToDatabase(player1Value, player2Value) {
+async function savePlayerDataToDatabase() {
     try {
-        let response = await fetch(`${backendURL}/api/Player/new-players`, {
+        let response = await fetch(`${backendURL}/api/player/new-players`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -640,8 +640,8 @@ angleInput.addEventListener('input', validateGameInputFields);
 document.getElementById('fireButton').addEventListener('click', handleFireButtonClick);
 document.getElementById('startGameBtn').addEventListener('click', (event) => {
     event.preventDefault();
-    startGame();
     savePlayerDataToDatabase();
+    startGame();
 });
 
 

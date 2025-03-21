@@ -134,41 +134,40 @@
             background-color: #1976D2;
         }
 
-        /* Table styling */
-    table {
-        width: 100%;
-        border-collapse: collapse; /* Ensures no double borders between cells */
-    }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-    th, td {
-        border: 1px solid #ccc; /* Adds borders around each cell */
-        padding: 12px;
-        text-align: left;
-    }
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: left;
+        }
 
-    th {
-        background-color: #4CAF50;
-        color: white;
-        font-weight: bold;
-    }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
 
-    td {
-        background-color: #f9f9f9;
-    }
+        td {
+            background-color: #f9f9f9;
+        }
 
-    tr:nth-child(even) td {
-        background-color: #f1f1f1;
-    }
+        tr:nth-child(even) td {
+            background-color: #f1f1f1;
+        }
 
-    tr:hover td {
-        background-color: #e0e0e0;
-    }
+        tr:hover td {
+            background-color: #e0e0e0;
+        }
 
-    /* Styling for the leaderboard dialog box */
-    .leaderboard-container table {
-        width: 100%;
-        margin-top: 10px;
-    }
+        .leaderboard-container table {
+            width: 100%;
+            margin-top: 10px;
+        }
     </style>
 </head>
 
@@ -181,15 +180,6 @@
             <button id="startGameBtn" type="button" disabled>Start Game</button>
         </div>
     </div>
-
-    <!-- <div class="overlay" id="leaderboardOverlay">
-        <div class="dialog-box">
-            <h2>Leaderboard</h2>
-            <div id="leaderboard" class="leaderboard-container">
-            </div>
-            <button class="cancel-btn" onclick="closeLeaderboard()">Close</button>
-        </div>
-    </div> -->
 
     <canvas id="gameCanvas"></canvas>
     <div class="container">
@@ -213,29 +203,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Leaderboard data will be injected here -->
                 </tbody>
             </table>
             <button class="cancel-btn" onclick="closeLeaderboard()">Close</button>
         </div>
     </div>
-    
+
     <script>
         async function fetchLeaderboardData() {
             try {
                 const response = await fetch(`${backendURL}/api/Database/leaderboard`);
                 const data = await response.json();
-                
+
                 if (data && Array.isArray(data)) {
                     const leaderboardTable = document.getElementById('leaderboard').getElementsByTagName('tbody')[0];
                     leaderboardTable.innerHTML = '';  // Clear existing rows
-    
+
                     data.forEach(entry => {
                         const row = leaderboardTable.insertRow();
-    
+
                         const playerNameCell = row.insertCell(0);
                         playerNameCell.textContent = entry.playerName;
-    
+
                         const highScoreCell = row.insertCell(1);
                         highScoreCell.textContent = entry.highScore;
                     });
@@ -244,12 +233,12 @@
                 console.error('Error fetching leaderboard data:', error);
             }
         }
-    
+
         function openLeaderboard() {
             fetchLeaderboardData();
             document.getElementById('leaderboardOverlay').style.display = 'flex';
         }
-    
+
         function closeLeaderboard() {
             document.getElementById('leaderboardOverlay').style.display = 'none';
         }
